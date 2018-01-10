@@ -1,3 +1,5 @@
 import { NativeModules } from 'react-native';
 
-export const WebOAuth = NativeModules.RNWebOAuth;
+console.log("Native modules");
+console.dir(NativeModules);
+export default WebOAuth = NativeModules.RNWebOAuth;
