@@ -3,14 +3,12 @@ package com.mdashley.react.weboauth;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.telecom.Call;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
-import com.lufinkey.react.weboauth.OAuthActivity;
 
 public class RNWebOAuthModule extends ReactContextBaseJavaModule
 {
