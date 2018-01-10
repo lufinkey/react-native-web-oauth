@@ -2,5 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mdashley.react.weboauth">
 
+	<application>
+		<activity
+			android:name="com.mdashley.react.weboauth.OAuthActivity">
+		</activity>
+	</application>
 </manifest>
-  
