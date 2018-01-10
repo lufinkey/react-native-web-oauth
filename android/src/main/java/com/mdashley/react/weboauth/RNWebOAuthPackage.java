@@ -1,4 +1,3 @@
-
 package com.mdashley.react.weboauth;
 
 import java.util.Arrays;

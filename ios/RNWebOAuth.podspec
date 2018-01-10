@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author             = { "author" => "luisfinke@gmail.com" }
   s.platform     = :ios, "7.0"
-  s.source       = { :git => "https://github.com/lufinkey/react-native-web-oauth.git", :tag => "master" }
+  s.source       = { :git => "https://github.com/mdashley/react-native-web-oauth.git", :tag => "master" }
   s.source_files  = "RNWebOAuth/**/*.{h,m}"
   s.requires_arc = true
 

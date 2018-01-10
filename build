@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Print commands.
+set -x
+
+# Exit on first error.
+set -e
+
+npm run lint
+
+npm run test

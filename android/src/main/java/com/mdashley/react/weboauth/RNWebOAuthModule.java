@@ -1,4 +1,3 @@
-
 package com.mdashley.react.weboauth;
 
 import com.facebook.react.bridge.ReactApplicationContext;
