@@ -20,9 +20,7 @@ public class OAuthWebViewClient extends WebViewClient
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView webView, String url)
 	{
-		System.out.println("shouldOverrideUrlLoading: "+url);
 		Uri uri = Uri.parse(url);
-		System.out.println("lastPathSegment: " + uri.getLastPathSegment());
 		if(scheme.equals(uri.getScheme()) && host.equals(uri.getHost()))
 		{
 			this.listener.onIntendedURIReached(uri);

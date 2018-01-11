@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 
-public class RNWebOAuthModule extends ReactContextBaseJavaModule
+public class RNWebOAuthModule extends ReactContextBaseJavaModule implements ActivityEventListener
 {
 	private final ReactApplicationContext reactContext;
 
@@ -20,6 +21,8 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule
 	{
 		super(reactContext);
 		this.reactContext = reactContext;
+
+		reactContext.addActivityEventListener(this);
 	}
 
 	@Override
@@ -46,9 +49,18 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule
 		mainActivity.startActivity(intent);
 	}
 
-	@ReactMethod
-	public void handleURL(String url)
+	@Override
+	public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data)
 	{
-		System.out.println("handleURL: "+url);
+		//
+	}
+
+	@Override
+	public void onNewIntent(Intent intent)
+	{
+		if(OAuthActivity.currentActivity != null)
+		{
+			OAuthActivity.currentActivity.handleResponse(intent.getData());
+		}
 	}
 }
