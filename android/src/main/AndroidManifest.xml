@@ -4,6 +4,7 @@
 
 	<application>
 		<activity
+			android:launchMode="singleTask"
 			android:name="com.mdashley.react.weboauth.OAuthActivity">
 		</activity>
 	</application>
