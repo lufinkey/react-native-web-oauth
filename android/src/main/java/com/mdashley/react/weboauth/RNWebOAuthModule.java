@@ -30,6 +30,13 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule
 	public void login(ReadableMap options, final Callback callback)
 	{
 		Activity mainActivity = reactContext.getCurrentActivity();
-		mainActivity.startActivity(new Intent(mainActivity, OAuthActivity.class));
+		Intent intent = new Intent(mainActivity, OAuthActivity.class);
+		intent.putExtra("url", options.getString("url"));
+		intent.putExtra("redirectScheme", options.getString("redirectScheme"));
+		intent.putExtra("redirectHost", options.getString("redirectHost"));
+
+		OAuthActivity.authCompletion = callback;
+
+		mainActivity.startActivity(intent);
 	}
 }
