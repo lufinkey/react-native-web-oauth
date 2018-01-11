@@ -23,16 +23,24 @@ import java.util.Set;
 
 public class OAuthActivity extends Activity implements OAuthWebViewClientListener
 {
-	static Callback authCompletion;
+	static OAuthActivity currentActivity = null;
+	static Callback authCompletion = null;
 
-	private Callback completion;
-	private boolean useBrowser;
-	private WritableMap response;
+	private Callback completion = null;
+	private boolean useBrowser = false;
+	private WritableMap response = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		if(currentActivity!=null)
+		{
+			throw new IllegalStateException("Cannot create multiple OAuthActivity instances at the same time");
+		}
+
 		super.onCreate(savedInstanceState);
+
+		currentActivity = this;
 
 		completion = authCompletion;
 		authCompletion = null;
@@ -44,11 +52,13 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 		String redirectHost = intent.getStringExtra("redirectHost");
 		useBrowser = intent.getBooleanExtra("useBrowser", false);
 
+		System.out.println("loading url " + url);
 		if(useBrowser)
 		{
 			final CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
 				@Override
 				public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient client) {
+					System.out.println("custom tabs service connected: "+componentName);
 					CustomTabsSession session = client.newSession(new CustomTabsCallback() {
 						@Override
 						public void onNavigationEvent(int event, Bundle extras)
@@ -59,10 +69,14 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 					final CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 					final CustomTabsIntent intent = builder.build();
 					client.warmup(0L); // This prevents backgrounding after redirection
+					intent.intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 					intent.launchUrl(OAuthActivity.this, Uri.parse(url));
 				}
 				@Override
-				public void onServiceDisconnected(ComponentName name) {}
+				public void onServiceDisconnected(ComponentName name)
+				{
+					System.out.println("custom tabs service disconnected: "+name);
+				}
 			};
 			CustomTabsClient.bindCustomTabsService(this, "com.android.chrome", connection);
 
@@ -78,7 +92,6 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 			OAuthWebViewClient webViewClient = new OAuthWebViewClient(redirectScheme, redirectHost, this);
 			webView.setWebViewClient(webViewClient);
 
-			System.out.println("loading url " + url);
 			webView.getSettings().setJavaScriptEnabled(true);
 			webView.loadUrl(url);
 		}
@@ -135,9 +148,11 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 	@Override
 	protected void onDestroy()
 	{
+		System.out.println("destroying OAuthActivity");
 		super.onDestroy();
 		if(isFinishing())
 		{
+			System.out.println("finishing OAuthActivity");
 			if(completion != null)
 			{
 				completion.invoke(response);
