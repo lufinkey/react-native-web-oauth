@@ -3,6 +3,8 @@ package com.mdashley.react.weboauth;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -29,14 +31,29 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule
 	@ReactMethod
 	public void login(ReadableMap options, final Callback callback)
 	{
-		Activity mainActivity = reactContext.getCurrentActivity();
-		Intent intent = new Intent(mainActivity, OAuthActivity.class);
-		intent.putExtra("url", options.getString("url"));
-		intent.putExtra("redirectScheme", options.getString("redirectScheme"));
-		intent.putExtra("redirectHost", options.getString("redirectHost"));
+		if(options.hasKey("useBrowser") && options.getBoolean("useBrowser"))
+		{
+			CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+			CustomTabsIntent intent = builder.build();
+			intent.launchUrl(reactContext.getCurrentActivity(), Uri.parse(options.getString("url")));
+		}
+		else
+		{
+			Activity mainActivity = reactContext.getCurrentActivity();
+			Intent intent = new Intent(mainActivity, OAuthActivity.class);
+			intent.putExtra("url", options.getString("url"));
+			intent.putExtra("redirectScheme", options.getString("redirectScheme"));
+			intent.putExtra("redirectHost", options.getString("redirectHost"));
 
-		OAuthActivity.authCompletion = callback;
+			OAuthActivity.authCompletion = callback;
 
-		mainActivity.startActivity(intent);
+			mainActivity.startActivity(intent);
+		}
+	}
+
+	@ReactMethod
+	public void handleURL(String url)
+	{
+		System.out.println("handleURL: "+url);
 	}
 }
