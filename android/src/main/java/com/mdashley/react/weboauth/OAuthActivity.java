@@ -47,7 +47,6 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 			return;
 		}
 
-		System.out.println("loading url " + url);
 		if(useBrowser)
 		{
 			CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -57,6 +56,8 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 		}
 		else
 		{
+			progressDialog.dismiss();
+
 			setContentView(R.layout.oauth_layout);
 			WebView webView = (WebView) findViewById(R.id.oauth_webview);
 
@@ -197,7 +198,10 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 	{
 		super.onDestroy();
 		currentActivity = null;
-		progressDialog.dismiss();
+		if(progressDialog.isShowing())
+		{
+			progressDialog.dismiss();
+		}
 		if(isFinishing())
 		{
 			if(completion != null)

@@ -30,7 +30,7 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule implements Acti
 	}
 
 	@ReactMethod
-	public void login(ReadableMap options, final Callback callback)
+	public void performWebAuth(ReadableMap options, final Callback callback)
 	{
 		Activity mainActivity = reactContext.getCurrentActivity();
 		Intent intent = new Intent(mainActivity, OAuthActivity.class);
