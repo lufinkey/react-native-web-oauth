@@ -3,8 +3,6 @@ package com.mdashley.react.weboauth;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
