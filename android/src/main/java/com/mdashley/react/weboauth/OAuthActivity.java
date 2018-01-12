@@ -43,6 +43,7 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 
 		if(url == null || url.length() == 0)
 		{
+			System.out.println("A malformed URL was passed to OAuthActivity.handleRequestIntent");
 			finish();
 			return;
 		}
