@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 	
 	if(urlString != nil && url == nil)
 	{
-		NSLog(@"passed malformed URL to WebOAuth.performWebAuth");
+		NSLog(@"A malformed URL was passed to WebOAuth.performWebAuth");
 		if(completion)
 		{
 			completion(@[ [NSNull null] ]);
