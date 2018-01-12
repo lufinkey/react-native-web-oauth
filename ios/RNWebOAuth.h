@@ -7,5 +7,7 @@
 
 @interface RNWebOAuth : NSObject <RCTBridgeModule>
 
+-(void)performWebAuth:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion;
+
 @end
 

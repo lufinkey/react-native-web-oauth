@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A0E0407A20082C1000ACE4A5 /* RNWebOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0E0407920082C1000ACE4A5 /* RNWebOAuthViewController.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNWebOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNWebOAuth.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNWebOAuth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNWebOAuth.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0E0407820082C1000ACE4A5 /* RNWebOAuthViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNWebOAuthViewController.h; sourceTree = "<group>"; };
+		A0E0407920082C1000ACE4A5 /* RNWebOAuthViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNWebOAuthViewController.m; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNWebOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNWebOAuth.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNWebOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNWebOAuth.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,6 +53,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				A0E0407820082C1000ACE4A5 /* RNWebOAuthViewController.h */,
+				A0E0407920082C1000ACE4A5 /* RNWebOAuthViewController.m */,
 				B3E7B5881CC2AC0600A0062D /* RNWebOAuth.h */,
 				B3E7B5891CC2AC0600A0062D /* RNWebOAuth.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
@@ -113,6 +118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNWebOAuth.m in Sources */,
+				A0E0407A20082C1000ACE4A5 /* RNWebOAuthViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +210,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
