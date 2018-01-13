@@ -53,8 +53,15 @@ RCT_EXPORT_MODULE()
 	return obj;
 }
 
+-(UIViewController*)rootViewController
+{
+	return [UIApplication sharedApplication].keyWindow.rootViewController;
+}
+
 RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion)
 {
+	NSLog(@"performWebAuth");
+	
 	NSString* urlString = options[@"url"];
 	NSURL* url = [NSURL URLWithString:urlString];
 	NSString* redirectScheme = options[@"redirectScheme"];
@@ -74,16 +81,24 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 	if(useBrowser != nil && useBrowser.boolValue)
 	{
 		//TODO use browser
+		NSLog(@"The browser isn't supported right now");
+		if(completion)
+		{
+			completion(@[ [NSNull null] ]);
+		}
 	}
 	else
 	{
-		RNWebOAuthViewController* webViewController = [[RNWebOAuthViewController alloc] initWithURL:url scheme:redirectScheme host:redirectHost];
-		[webViewController setCompletion:^(NSURL* url) {
-			if(completion)
-			{
-				completion(@[ [self.class ID:[self.class responseFromURL:url]] ]);
-			}
-		}];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			RNWebOAuthViewController* webViewController = [[RNWebOAuthViewController alloc] initWithURL:url scheme:redirectScheme host:redirectHost];
+			[webViewController setCompletion:^(NSURL* url) {
+				if(completion)
+				{
+					completion(@[ [self.class ID:[self.class responseFromURL:url]] ]);
+				}
+			}];
+			[[self rootViewController] presentViewController:webViewController animated:YES completion:nil];
+		});
 	}
 }
 

@@ -19,6 +19,9 @@
 		_redirectHost = host;
 		_completed = NO;
 		_completion = nil;
+		
+		self.modalPresentationStyle = UIModalPresentationPageSheet;
+		self.extendedLayoutIncludesOpaqueBars = YES;
 	}
 	return self;
 }
@@ -27,18 +30,24 @@
 {
 	[super viewDidLoad];
 	
+	self.view.backgroundColor = [UIColor blackColor];
+	
+	_navigationBar = [[UINavigationBar alloc] init];
+	UINavigationItem* item = [[UINavigationItem alloc] initWithTitle:@""];
+	item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(didSelectCancelButton)];
+	[_navigationBar setItems:@[item]];
+	_navigationBar.translucent = NO;
+	_navigationBar.barTintColor = [UIColor blackColor];
+	_navigationBar.tintColor = [UIColor whiteColor];
+	_navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+	
 	_webView = [[UIWebView alloc] init];
 	[_webView loadRequest:[NSURLRequest requestWithURL:_initialURL]];
 	
-	UINavigationItem* navItem = [[UINavigationItem alloc] init];
-	[navItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-																   style:UIBarButtonItemStylePlain
-																  target:self
-																  action:@selector(didSelectCancelButton)]];
-	_navigationBar = [[UINavigationBar alloc] init];
-	
 	[self.view addSubview:_navigationBar];
 	[self.view addSubview:_webView];
+	
+	[self setNeedsStatusBarAppearanceUpdate];
 }
 
 -(void)viewWillLayoutSubviews
@@ -46,14 +55,25 @@
 	[super viewWillLayoutSubviews];
 	CGSize size = self.view.bounds.size;
 	
-	CGFloat navBarHeight = 44;
-	if(![UIApplication sharedApplication].isStatusBarHidden)
+	CGFloat statusBarHeight = 0;
+	if(![UIApplication sharedApplication].statusBarHidden)
 	{
-		navBarHeight += [UIApplication sharedApplication].statusBarFrame.size.height;
+		statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
 	}
 	
-	_navigationBar.frame = CGRectMake(0, 0, size.width, navBarHeight);
-	_webView.frame = CGRectMake(0, navBarHeight, size.width, size.height);
+	CGFloat navOffset = 0;
+	_navigationBar.frame = CGRectMake(0, statusBarHeight, size.width, 44);
+	if(!_navigationBar.hidden)
+	{
+		navOffset = statusBarHeight+44;
+	}
+	
+	_webView.frame = CGRectMake(0, navOffset, size.width, size.height-navOffset);
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+	return UIStatusBarStyleLightContent;
 }
 
 -(void)didSelectCancelButton
