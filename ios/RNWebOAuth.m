@@ -128,7 +128,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if(useBrowser != nil && useBrowser.boolValue)
 		{
-			/*if (@available(iOS 11.0, *))
+			if (@available(iOS 11.0, *))
 			{
 				if(_sfAuthSession != nil)
 				{
@@ -159,7 +159,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 				[_sfAuthSession start];
 			}
 			else
-			{*/
+			{
 				if(RNWebOAuth_currentSafariModule != nil || _safariViewController != nil)
 				{
 					if(completion != nil)
@@ -195,7 +195,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 				};
 				
 				[[self topViewController] showViewController:_safariViewController sender:nil];
-			/*}*/
+			}
 		}
 		else
 		{
