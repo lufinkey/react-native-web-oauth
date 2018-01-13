@@ -95,9 +95,14 @@ RCT_EXPORT_MODULE()
 	return [NSError errorWithDomain:RNWebOAuthErrorDomain code:code userInfo:@{ NSLocalizedDescriptionKey: message }];
 }
 
--(UIViewController*)rootViewController
+-(UIViewController*)topViewController
 {
-	return [UIApplication sharedApplication].keyWindow.rootViewController;
+	UIViewController* topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+	while(topController.presentedViewController != nil)
+	{
+		topController = topController.presentedViewController;
+	}
+	return topController;
 }
 
 RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseSenderBlock)completion)
@@ -173,7 +178,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 					return NO;
 				};
 				
-				[[self rootViewController] presentViewController:_safariViewController animated:YES completion:nil];
+				[[self topViewController] presentViewController:_safariViewController animated:YES completion:nil];
 			}
 		}
 		else
@@ -185,7 +190,7 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 					completion(@[ [self.class ID:[self.class responseFromURL:url]], [self.class error:error] ]);
 				}
 			}];
-			[[self rootViewController] presentViewController:webViewController animated:YES completion:nil];
+			[[self topViewController] presentViewController:webViewController animated:YES completion:nil];
 		}
 	});
 }
