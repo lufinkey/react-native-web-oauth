@@ -3,7 +3,7 @@
 #import <UIKit/UIKit.h>
 
 
-typedef void(^RNWebOAuthResponseBlock)(NSURL*);
+typedef void(^RNWebOAuthResponseBlock)(NSURL*,NSError*);
 
 
 @interface RNWebOAuthViewController : UIViewController <UIWebViewDelegate>

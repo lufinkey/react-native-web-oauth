@@ -86,7 +86,7 @@
 	[self.presentingViewController dismissViewControllerAnimated:YES completion:^{
 		if(_completion != nil)
 		{
-			_completion(nil);
+			_completion(nil, nil);
 		}
 	}];
 }
@@ -97,7 +97,7 @@
 	{
 		_completed = YES;
 		[self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-			_completion(request.URL);
+			_completion(request.URL, nil);
 		}];
 		return NO;
 	}

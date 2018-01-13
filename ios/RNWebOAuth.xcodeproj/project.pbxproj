@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A091EBBB2009E0B700779FE4 /* RNWebOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNWebOAuth.m */; };
+		A091EBCC2009E0EF00779FE4 /* RNWebOAuth.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B3E7B5881CC2AC0600A0062D /* RNWebOAuth.h */; };
 		A0E0407A20082C1000ACE4A5 /* RNWebOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0E0407920082C1000ACE4A5 /* RNWebOAuthViewController.m */; };
-		B3E7B58A1CC2AC0600A0062D /* RNWebOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNWebOAuth.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,6 +19,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				A091EBCC2009E0EF00779FE4 /* RNWebOAuth.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +119,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* RNWebOAuth.m in Sources */,
+				A091EBBB2009E0B700779FE4 /* RNWebOAuth.m in Sources */,
 				A0E0407A20082C1000ACE4A5 /* RNWebOAuthViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

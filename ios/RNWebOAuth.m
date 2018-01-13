@@ -1,8 +1,23 @@
 
 #import "RNWebOAuth.h"
 #import "RNWebOAuthViewController.h"
+#import <SafariServices/SafariServices.h>
+
+
+NSString* const RNWebOAuthErrorDomain = @"RNWebOAuthErrorDomain";
+
+@interface RNWebOAuth() <SFSafariViewControllerDelegate>
+{
+	SFAuthenticationSession* _sfAuthSession;
+	SFSafariViewController* _safariViewController;
+	NSString* _redirectScheme;
+	NSString* _redirectHost;
+}
+@end
 
 @implementation RNWebOAuth
+
+static BOOL(^RNWebOAuth_urlHandler)(NSURL* url) = nil;
 
 RCT_EXPORT_MODULE()
 
@@ -53,6 +68,33 @@ RCT_EXPORT_MODULE()
 	return obj;
 }
 
++(id)error:(NSError*)error
+{
+	if(error==nil)
+	{
+		return [NSNull null];
+	}
+	NSDictionary* fields = error.userInfo[@"jsFields"];
+	NSMutableDictionary* obj = nil;
+	if(fields!=nil)
+	{
+		obj = fields.mutableCopy;
+	}
+	else
+	{
+		obj = [NSMutableDictionary dictionary];
+	}
+	obj[@"domain"] = error.domain;
+	obj[@"code"] = @(error.code);
+	obj[@"message"] = error.localizedDescription;
+	return obj;
+}
+
++(NSError*)errorWithCode:(RNWebOAuthErrorCode)code message:(NSString*)message
+{
+	return [NSError errorWithDomain:RNWebOAuthErrorDomain code:code userInfo:@{ NSLocalizedDescriptionKey: message }];
+}
+
 -(UIViewController*)rootViewController
 {
 	return [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -77,28 +119,91 @@ RCT_EXPORT_METHOD(performWebAuth:(NSDictionary*)options completion:(RCTResponseS
 		}
 		return;
 	}
-	
-	if(useBrowser != nil && useBrowser.boolValue)
-	{
-		//TODO use browser
-		NSLog(@"The browser isn't supported right now");
-		if(completion)
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if(useBrowser != nil && useBrowser.boolValue)
 		{
-			completion(@[ [NSNull null] ]);
+			if (@available(iOS 11.0, *))
+			{
+				if(_sfAuthSession != nil)
+				{
+					if(completion)
+					{
+						completion(@[ [NSNull null], [self.class ID:[self.class errorWithCode:RNWebOAuthErrorCodeMultipleSessions message:@"Cannot perform multiple oauth sessions at the same time"]] ]);
+					}
+					return;
+				}
+				_sfAuthSession = [[SFAuthenticationSession alloc] initWithURL:url callbackURLScheme:redirectScheme completionHandler:^(NSURL* url, NSError* error) {
+					_sfAuthSession = nil;
+					if(completion)
+					{
+						completion(@[ [self.class ID:[self.class responseFromURL:url]], [self.class error:error] ]);
+					}
+				}];
+				[_sfAuthSession start];
+			}
+			else
+			{
+				if(RNWebOAuth_urlHandler != nil || _safariViewController != nil)
+				{
+					if(completion)
+					{
+						completion(@[ [NSNull null], [self.class ID:[self.class errorWithCode:RNWebOAuthErrorCodeMultipleSessions message:@"Cannot perform multiple oauth sessions at the same time"]] ]);
+					}
+					return;
+				}
+				_safariViewController = [[SFSafariViewController alloc] initWithURL:url];
+				_safariViewController.delegate = self;
+				
+				RNWebOAuth_urlHandler = ^BOOL(NSURL* url) {
+					if(url == nil || ([url.scheme isEqualToString:_redirectScheme] && [url.host isEqualToString:_redirectHost]))
+					{
+						RNWebOAuth_urlHandler = nil;
+						[_safariViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
+							_safariViewController = nil;
+							_redirectScheme = nil;
+							_redirectHost = nil;
+							if(completion)
+							{
+								completion(@[ [self.class ID:[self.class responseFromURL:url]], [NSNull null] ]);
+							}
+						}];
+						return YES;
+					}
+					return NO;
+				};
+				
+				[[self rootViewController] presentViewController:_safariViewController animated:YES completion:nil];
+			}
 		}
-	}
-	else
-	{
-		dispatch_async(dispatch_get_main_queue(), ^{
+		else
+		{
 			RNWebOAuthViewController* webViewController = [[RNWebOAuthViewController alloc] initWithURL:url scheme:redirectScheme host:redirectHost];
-			[webViewController setCompletion:^(NSURL* url) {
+			[webViewController setCompletion:^(NSURL* url, NSError* error) {
 				if(completion)
 				{
-					completion(@[ [self.class ID:[self.class responseFromURL:url]] ]);
+					completion(@[ [self.class ID:[self.class responseFromURL:url]], [self.class error:error] ]);
 				}
 			}];
 			[[self rootViewController] presentViewController:webViewController animated:YES completion:nil];
-		});
+		}
+	});
+}
+
++(BOOL)application:(UIApplication*)application openURL:(NSURL*)url
+{
+	if(RNWebOAuth_urlHandler != nil)
+	{
+		return RNWebOAuth_urlHandler(url);
+	}
+	return NO;
+}
+
+-(void)safariViewControllerDidFinish:(SFSafariViewController*)controller
+{
+	if(RNWebOAuth_urlHandler != nil)
+	{
+		RNWebOAuth_urlHandler(nil);
 	}
 }
 
