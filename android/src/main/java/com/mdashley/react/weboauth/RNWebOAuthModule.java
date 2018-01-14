@@ -58,7 +58,7 @@ public class RNWebOAuthModule extends ReactContextBaseJavaModule implements Acti
 	{
 		if(OAuthActivity.currentActivity != null)
 		{
-			OAuthActivity.currentActivity.handleResponse(intent.getData());
+			OAuthActivity.currentActivity.handleURI(intent.getData());
 		}
 	}
 }

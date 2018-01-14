@@ -28,6 +28,8 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 
 	private boolean useBrowser = false;
 	private boolean browserIsOpen = false;
+	private String browserRedirectScheme = "";
+	private String browserRedirectHost = "";
 
 	private WritableMap response = null;
 	private boolean responded = false;
@@ -50,6 +52,9 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 
 		if(useBrowser)
 		{
+			browserRedirectScheme = redirectScheme;
+			browserRedirectHost = redirectHost;
+
 			CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 			CustomTabsIntent chromeIntent = builder.build();
 			chromeIntent.launchUrl(this, Uri.parse(url));
@@ -120,6 +125,28 @@ public class OAuthActivity extends Activity implements OAuthWebViewClientListene
 		}
 
 		finish();
+	}
+
+	void handleURI(Uri uri)
+	{
+		if(uri == null)
+		{
+			return;
+		}
+
+		String pathStr = "/";
+		if(browserRedirectHost != null)
+		{
+			pathStr += browserRedirectHost;
+		}
+
+		if(uri.getScheme().equals(browserRedirectScheme)
+		   && ((browserRedirectHost != null && uri.getHost() != null && uri.getHost().equals(browserRedirectHost))
+				|| (browserRedirectHost == null && uri.getHost() == null)
+				|| ((uri.getHost() == null || uri.getHost().length() == 0) && uri.getPath().equals(pathStr))))
+		{
+			handleResponse(uri);
+		}
 	}
 
 	@Override
