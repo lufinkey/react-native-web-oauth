@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests specified\" && exit 0",
-	"lint": "eslint .",
-	"postinstall": "node ./node_modules/rn-nodeify/cmd.js --install http,url --hack"
+    "lint": "eslint .",
+    "postinstall": "node ../rn-nodeify/cmd.js --install http,url --hack"
   },
   "keywords": [
     "react-native"
@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "querystring": "^0.2.0",
-    "rn-nodeify": "^8.3.0"
+    "rn-nodeify": "^8.3.0",
+    "react-native-http": "tradle/react-native-http#834492d",
+    "url": "~0.10.1"
   }
 }
