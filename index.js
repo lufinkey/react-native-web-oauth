@@ -25,7 +25,7 @@ WebOAuth.login = function(options, callback)
 		//TODO perform token swap
 		if(callback)
 		{
-			callback(false, null);
+			callback(response, null);
 		}
 	});
 }
