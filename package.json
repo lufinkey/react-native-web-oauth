@@ -3,18 +3,13 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0",
-    "lint": "eslint ."
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "keywords": [
     "react-native"
   ],
   "peerDependencies": {
     "react-native": "^0.41.2"
-  },
-  "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0"
   },
   "dependencies": {
     "querystring": "^0.2.0"
